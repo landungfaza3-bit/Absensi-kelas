@@ -1,0 +1,236 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Aplikasi Absensi Siswa</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 10px;
+            width: 30%;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .hadir {
+            background-color: green;
+        }
+
+        .izin {
+            background-color: orange;
+        }
+
+        .alfa {
+            background-color: red;
+        }
+
+        #hasil {
+            margin-top: 20px;
+            background: #eeeeee;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .rekap {
+            margin-top: 20px;
+            background: #dfefff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>APLIKASI ABSENSI SISWA</h1>
+
+        <input 
+            type="text" 
+            id="nama" 
+            placeholder="Masukkan Nama Siswa"
+        >
+
+        <div class="button-group">
+
+            <button 
+                class="hadir"
+                onclick="absen('Hadir')"
+            >
+                Hadir
+            </button>
+
+            <button 
+                class="izin"
+                onclick="absen('Izin')"
+            >
+                Izin
+            </button>
+
+            <button 
+                class="alfa"
+                onclick="absen('Alfa')"
+            >
+                Alfa
+            </button>
+
+        </div>
+
+        <h2>Data Absensi</h2>
+
+        <div id="hasil"></div>
+
+        <div class="rekap" id="rekap">
+            <h2>Rekap Kehadiran</h2>
+
+            <p>Hadir : <span id="jumlahHadir">0</span></p>
+            <p>Izin : <span id="jumlahIzin">0</span></p>
+            <p>Alfa : <span id="jumlahAlfa">0</span></p>
+
+            <p>
+                Presentase Kehadiran :
+                <span id="presentase">0%</span>
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+
+        // Menyimpan data absensi
+        let dataAbsensi = [];
+
+        // Fungsi absen
+        function absen(status) {
+
+            // Mengambil nama siswa
+            let nama = document.getElementById("nama").value;
+
+            // Validasi input
+            if (nama === "") {
+
+                alert("Nama siswa harus diisi!");
+                return;
+            }
+
+            // Membuat object siswa
+            let siswa = {
+                nama: nama,
+                status: status
+            };
+
+            // Menyimpan data ke array
+            dataAbsensi.push(siswa);
+
+            // Menampilkan data
+            tampilkanData();
+
+            // Menghitung rekap
+            hitungRekap();
+
+            // Mengosongkan input
+            document.getElementById("nama").value = "";
+        }
+
+        // Menampilkan data absensi
+        function tampilkanData() {
+
+            let hasil = document.getElementById("hasil");
+
+            hasil.innerHTML = "";
+
+            dataAbsensi.forEach(function(item) {
+
+                hasil.innerHTML += `
+                    <p>
+                        Nama : ${item.nama}
+                        | Status : ${item.status}
+                    </p>
+                `;
+            });
+        }
+
+        // Menghitung rekap absensi
+        function hitungRekap() {
+
+            let hadir = 0;
+            let izin = 0;
+            let alfa = 0;
+
+            // Menghitung jumlah status
+            dataAbsensi.forEach(function(item) {
+
+                if(item.status === "Hadir") {
+                    hadir++;
+                }
+
+                else if(item.status === "Izin") {
+                    izin++;
+                }
+
+                else if(item.status === "Alfa") {
+                    alfa++;
+                }
+
+            });
+
+            // Total absensi
+            let total = hadir + izin + alfa;
+
+            // Menghitung presentase
+            let presentase = 0;
+
+            if(total > 0) {
+                presentase = (hadir / total) * 100;
+            }
+
+            // Menampilkan rekap
+            document.getElementById("jumlahHadir").innerText = hadir;
+            document.getElementById("jumlahIzin").innerText = izin;
+            document.getElementById("jumlahAlfa").innerText = alfa;
+
+            document.getElementById("presentase").innerText =
+                presentase.toFixed(2) + "%";
+        }
+
+    </script>
+
+</body>
+</html>
